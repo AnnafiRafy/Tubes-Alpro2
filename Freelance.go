@@ -268,14 +268,15 @@ func menuList(A arrTrack, n int) {
 		} else {
 			fmt.Println("Tidak ada data deadline.")
 		}
-		if pil == "b" {
-			idxGaji = bayaranMax(A, n)
-			if idxGaji != -1 {
-				fmt.Printf("\nBayaran Tertinggi:\nClient: %s\nProyek: %s\nGaji: %d\n",
-					A[idxGaji].client, A[idxGaji].projek, A[idxGaji].salary)
-			} else {
-				fmt.Println("Data tidak tersedia.")
-			}
+	}
+
+	if pil == "b" {
+		idxGaji = bayaranMax(A, n)
+		if idxGaji != -1 {
+			fmt.Printf("\nBayaran Tertinggi:\nClient: %s\nProyek: %s\nGaji: %d\n",
+				A[idxGaji].client, A[idxGaji].projek, A[idxGaji].salary)
+		} else {
+			fmt.Println("Data tidak tersedia.")
 		}
 	}
 }
