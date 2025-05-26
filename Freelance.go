@@ -5,8 +5,10 @@ import "fmt"
 const NMAX int = 1000
 
 type tracking struct {
-	client, projek, status, deadline string
-	salary, idProyek                 int
+	client, projek, status string
+	salary, idProyek       int
+	//deadline
+	hari, bulan int
 }
 type arrTrack [NMAX]tracking
 
@@ -47,8 +49,8 @@ func bacaData(A *arrTrack, n int) {
 		fmt.Print("Status (Progress/Selesai/Pending): ")
 		fmt.Scan(&A[i].status)
 
-		fmt.Print("Deadline (Tanggal(DD)-Bulan(MM)): ")
-		fmt.Scan(&A[i].deadline)
+		fmt.Print("Deadline (Tanggal(DD) Bulan(MM)): ")
+		fmt.Scan(&A[i].hari, &A[i].bulan)
 
 		fmt.Print("Gaji: ")
 		fmt.Scan(&A[i].salary)
@@ -151,8 +153,8 @@ func tambahProyek(A *arrTrack, n *int) {
 		fmt.Print("Status Proyek (Progress/Selesai/Pending) : ")
 		fmt.Scan(&A[*n].status)
 
-		fmt.Print("Deadline (Tanggal(DD)-Bulan(MM)) : ")
-		fmt.Scan(&A[*n].deadline)
+		fmt.Print("Deadline (Tanggal(DD) Bulan(MM)) : ")
+		fmt.Scan(&A[*n].hari, &A[*n].bulan)
 
 		fmt.Print("Gaji / Bayaran : ")
 		fmt.Scan(&A[*n].salary)
@@ -198,7 +200,7 @@ func ubahProyek(A *arrTrack, n int) {
 		fmt.Scan(&A[found].status)
 
 		fmt.Print("Deadline baru (Tanggal(DD)-Bulan(MM)) : ")
-		fmt.Scan(&A[found].deadline)
+		fmt.Scan(&A[found].hari, A[found].bulan)
 
 		fmt.Print("Gaji (baru) : ")
 		fmt.Scan(&A[found].salary)
@@ -261,21 +263,20 @@ func menuList(A arrTrack, n int) {
 	if pil == "a" {
 		idxDeadline = deadline(A, n)
 		if idxDeadline != -1 {
-			fmt.Printf("\nDeadline Terdekat:\nClient: %s\nProyek: %s\nDeadline: %s\n",
-				A[idxDeadline].client, A[idxDeadline].projek, A[idxDeadline].deadline)
+			fmt.Printf("\nDeadline Terdekat:\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\n",
+				A[idxDeadline].client, A[idxDeadline].projek, A[idxDeadline].hari, A[idxDeadline].bulan)
 		} else {
-			fmt.Println("Data tidak tersedia.")
+			fmt.Println("Tidak ada data deadline.")
 		}
-	} else if pil == "b" {
-		idxGaji = bayaranMax(A, n)
-		if idxGaji != -1 {
-			fmt.Printf("\nBayaran Tertinggi:\nClient: %s\nProyek: %s\nGaji: %d\n",
-				A[idxGaji].client, A[idxGaji].projek, A[idxGaji].salary)
-		} else {
-			fmt.Println("Data tidak tersedia.")
+		if pil == "b" {
+			idxGaji = bayaranMax(A, n)
+			if idxGaji != -1 {
+				fmt.Printf("\nBayaran Tertinggi:\nClient: %s\nProyek: %s\nGaji: %d\n",
+					A[idxGaji].client, A[idxGaji].projek, A[idxGaji].salary)
+			} else {
+				fmt.Println("Data tidak tersedia.")
+			}
 		}
-	} else {
-		fmt.Println("Pilihan tidak valid.")
 	}
 }
 
@@ -296,17 +297,16 @@ func bayaranMax(A arrTrack, n int) int {
 
 //sequential search
 func deadline(A arrTrack, n int) int {
-	var minIdx, i int
-	if n == 0 {
-		return -1
-	}
-	minIdx = 0
+	var terdekatIdx int
+	var i int
+
 	for i = 1; i < n; i++ {
-		if A[i].deadline < A[minIdx].deadline {
-			minIdx = i
+		if A[i].bulan < A[terdekatIdx].bulan ||
+			(A[i].bulan == A[terdekatIdx].bulan && A[i].hari < A[terdekatIdx].hari) {
+			terdekatIdx = i
 		}
 	}
-	return minIdx
+	return terdekatIdx
 }
 
 // Sorting berdasarkan bayaran tertinggi ke bawah
@@ -333,7 +333,7 @@ func deadlineUrut(A *arrTrack, n int) {
 	for i = 0; i < n-1; i++ {
 		minIdx = i
 		for j = i + 1; j < n; j++ {
-			if A[j].deadline < A[minIdx].deadline {
+			if A[j].hari < A[minIdx].hari {
 				minIdx = j
 			}
 		}
