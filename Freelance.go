@@ -16,8 +16,45 @@ var nProyek int
 func main() {
 	var pilihMenu int
 
+	fmt.Println()
+	fmt.Println("-----------------------------------")
+	fmt.Println("      ~~~ Selamat Datang ~~~	 	")
+	fmt.Println("-----------------------------------")
+	fmt.Println("Masukkan jumlah data yang ingin anda masukkan: ")
+	fmt.Scan(&nProyek)
+
 	bacaData(&data, nProyek)
 	menuUtama(&pilihMenu)
+}
+
+//procedure untuk scan dan menyimpan data di awal
+func bacaData(A *arrTrack, n int) {
+	var i int
+
+	fmt.Println("(Gunakan tanda '_' sebagai spasi jika Nama Client / Nama Proyek lebih dari 1 kata)")
+	for i = 0; i < n; i++ {
+		fmt.Printf("\nData ke - %d \n", i+1)
+
+		fmt.Print("ID Proyek : ")
+		fmt.Scan(&A[i].idProyek)
+
+		fmt.Print("Nama Client : ")
+		fmt.Scan(&A[i].client)
+
+		fmt.Print("Nama Proyek : ")
+		fmt.Scan(&A[i].projek)
+
+		fmt.Print("Status (Progress/Selesai/Pending): ")
+		fmt.Scan(&A[i].status)
+
+		fmt.Print("Deadline (Tanggal(DD)-Bulan(MM)): ")
+		fmt.Scan(&A[i].deadline)
+
+		fmt.Print("Gaji: ")
+		fmt.Scan(&A[i].salary)
+
+		fmt.Println()
+	}
 }
 
 //procedure pilihan menu utama
@@ -55,7 +92,7 @@ func menuUtama(pilMenu *int) {
 }
 
 // pilihan 1
-func menuEditProyek(data *arrTrack, n *int) {
+func menuEditProyek(A *arrTrack, n *int) {
 	var pilMenu int
 
 	for pilMenu != 4 {
@@ -72,51 +109,19 @@ func menuEditProyek(data *arrTrack, n *int) {
 
 		fmt.Scan(&pilMenu)
 		if pilMenu == 1 {
-			tambahProyek(data, n)
+			tambahProyek(A, n)
+		} else if pilMenu == 2 {
+			ubahProyek(A, *n)
+		} else if pilMenu == 3 {
+			hapusProyek(A, n)
 		}
 		//else if pilMenu == 2
 		//else if pilMenu == 3
 	}
 }
 
-func bacaData(A *arrTrack, n int) {
-	var i int
-
-	fmt.Println()
-	fmt.Println("-----------------------------------")
-	fmt.Println("      ~~~ Selamat Datang ~~~	 	")
-	fmt.Println("-----------------------------------")
-	fmt.Println("Masukkan jumlah data yang ingin anda masukkan: ")
-	fmt.Scan(&n)
-
-	for i = 0; i < n; i++ {
-		fmt.Printf("\nData ke - %d \n", i+1)
-		fmt.Println("(Gunakan tanda '_' sebagai spasi jika Nama Client / Nama Proyek lebih dari 1 kata)")
-
-		fmt.Print("ID Proyek : ")
-		fmt.Scan(&A[i].idProyek)
-
-		fmt.Print("Nama Client : ")
-		fmt.Scan(&A[i].client)
-
-		fmt.Print("Nama Proyek : ")
-		fmt.Scan(&A[i].projek)
-
-		fmt.Print("Status (Progress/Selesai/Pending): ")
-		fmt.Scan(&A[i].status)
-
-		fmt.Print("Deadline (Tanggal(DD)-Bulan(MM)): ")
-		fmt.Scan(&A[i].deadline)
-
-		fmt.Print("Gaji: ")
-		fmt.Scan(&A[i].salary)
-
-		fmt.Println()
-	}
-}
-
-//menu lanjutan untuk menambahakn proyek
-func tambahProyek(data *arrTrack, n *int) {
+//menu lanjutan dari menu 1 untuk menambahakn proyek
+func tambahProyek(A *arrTrack, n *int) {
 	var jumlah, i int
 
 	fmt.Println()
@@ -135,30 +140,117 @@ func tambahProyek(data *arrTrack, n *int) {
 	for i = 0; i < jumlah && *n < NMAX; i++ {
 		fmt.Printf("\nProyek ke - %d \n", i+1)
 		fmt.Print("ID Proyek : ")
-		fmt.Scan(&data[*n].idProyek)
+		fmt.Scan(&A[*n].idProyek)
 
 		fmt.Print("Nama Client : ")
-		fmt.Scan(&data[*n].client)
+		fmt.Scan(&A[*n].client)
 
 		fmt.Print("Nama Proyek : ")
-		fmt.Scan(&data[*n].projek)
+		fmt.Scan(&A[*n].projek)
 
 		fmt.Print("Status Proyek (Progress/Selesai/Pending) : ")
-		fmt.Scan(&data[*n].status)
+		fmt.Scan(&A[*n].status)
+
+		fmt.Print("Deadline (Tanggal(DD)-Bulan(MM)) : ")
+		fmt.Scan(&A[*n].deadline)
 
 		fmt.Print("Gaji / Bayaran : ")
-		fmt.Scan(&data[*n].salary)
+		fmt.Scan(&A[*n].salary)
 
 		*n++
 	}
 	fmt.Println("Proyek telah ditambahkan")
 }
 
+//menu lanjutan dari menu 1, untuk mengubah data proyek menggunakan Id Proyek
+func ubahProyek(A *arrTrack, n int) {
+	var i, cariId int
+	var found int
+	found = -1
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println("	Ubah Data Proyek		")
+	fmt.Println("---------------------------------")
+	fmt.Print("Masukkan ID Proyek yang ingin anda ubah : ")
+	fmt.Scan(&cariId)
+
+	for i = 0; i < n; i++ {
+		// jika id yang dicari ketemu
+		if A[i].idProyek == cariId {
+			found = i
+		}
+	}
+	//jika id yang dicari ketemu
+	if found != -1 {
+		fmt.Printf("\nData proyek dengan ID %d telah dipilih. \n", cariId)
+		fmt.Println()
+		fmt.Println("Silahkan masukan data baru : ")
+		fmt.Println("(Gunakan tanda '_' sebagai spasi jika Nama Client / Nama Proyek lebih dari 1 kata)")
+
+		fmt.Print("Nama Client (baru) : ")
+		fmt.Scan(&A[found].client)
+
+		fmt.Print("Nama Proyek (baru) : ")
+		fmt.Scan(&A[found].projek)
+
+		fmt.Print("Status baru (Progress/Selesai/Pending) : ")
+		fmt.Scan(&A[found].status)
+
+		fmt.Print("Deadline baru (Tanggal(DD)-Bulan(MM)) : ")
+		fmt.Scan(&A[found].deadline)
+
+		fmt.Print("Gaji (baru) : ")
+		fmt.Scan(&A[found].salary)
+
+		fmt.Println()
+		fmt.Println("Data proyek berhasil diperbarui.")
+	} else { // jika id yang dicari tidak ketemu
+		fmt.Println()
+		fmt.Println("Proyek dengan ID tersebut tidak ditemukan.")
+	}
+}
+
+func hapusProyek(A *arrTrack, n *int) {
+	var hapusId, i int
+	var found int
+	found = -1
+
+	fmt.Println()
+	fmt.Println("---------------------------------")
+	fmt.Println("	Hapus Data Proyek		")
+	fmt.Println("---------------------------------")
+	fmt.Print("Masukkan ID Proyek yang ingin anda hapus : ")
+	fmt.Scan(&hapusId)
+
+	for i = 0; i < *n; i++ {
+		if A[i].idProyek == hapusId {
+			found = i
+		}
+	}
+
+	if found != -1 {
+		for i = found; i < *n-1; i++ {
+			A[i] = A[i+1]
+		}
+		*n = *n - 1
+		fmt.Println("Proyek berhasil dihapus.")
+	} else {
+		fmt.Println()
+		fmt.Println("Proyek dengan ID tersebut tidak ditemukan.")
+	}
+}
+
 //menu nomor 4
-func menuList(data arrTrack, n int) {
+func menuList(A arrTrack, n int) {
 	var pil string
 	var idxGaji, idxDeadline int
 
+	fmt.Println()
+	fmt.Println("--------------------------------------------")
+	fmt.Println("      Apa yang ingin anda tampilkan?	 	")
+	fmt.Println("--------------------------------------------")
+	fmt.Println()
 	fmt.Println("a. Deadline terdekat")
 	fmt.Println("b. Bayaran tertinggi")
 	//fmt.Println("c. Data deadline terdekat dan yang terjauh")
@@ -167,18 +259,18 @@ func menuList(data arrTrack, n int) {
 	fmt.Scan(&pil)
 
 	if pil == "a" {
-		idxDeadline = deadline(data, n)
+		idxDeadline = deadline(A, n)
 		if idxDeadline != -1 {
 			fmt.Printf("\nDeadline Terdekat:\nClient: %s\nProyek: %s\nDeadline: %s\n",
-				data[idxDeadline].client, data[idxDeadline].projek, data[idxDeadline].deadline)
+				A[idxDeadline].client, A[idxDeadline].projek, A[idxDeadline].deadline)
 		} else {
 			fmt.Println("Data tidak tersedia.")
 		}
 	} else if pil == "b" {
-		idxGaji = bayaranMax(data, n)
+		idxGaji = bayaranMax(A, n)
 		if idxGaji != -1 {
 			fmt.Printf("\nBayaran Tertinggi:\nClient: %s\nProyek: %s\nGaji: %d\n",
-				data[idxGaji].client, data[idxGaji].projek, data[idxGaji].salary)
+				A[idxGaji].client, A[idxGaji].projek, A[idxGaji].salary)
 		} else {
 			fmt.Println("Data tidak tersedia.")
 		}
