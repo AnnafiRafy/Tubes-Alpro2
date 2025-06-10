@@ -80,8 +80,11 @@ func menuUtama(pilMenu *int) {
 			menuEditProyek(&data, &nProyek)
 		} else if *pilMenu == 4 {
 			menuList(data, nProyek)
+		} else if *pilMenu == 5 {
+			tampilProyek(&data, nProyek)
 		}
 	}
+
 	//else if *pilMenu == 2
 	//editStatus(pilMenu)
 	//else if *pilMenu == 3
@@ -90,7 +93,6 @@ func menuUtama(pilMenu *int) {
 	//list(pilMenu)
 	//else if *pilMenu == 5
 	//show(pilMenu)
-
 }
 
 // pilihan 1
@@ -341,5 +343,25 @@ func deadlineUrut(A *arrTrack, n int) {
 		temp = A[i]
 		A[i] = A[minIdx]
 		A[minIdx] = temp
+	}
+}
+
+func tampilProyek(A *arrTrack, n int) {
+	var i int
+
+	if n == 0 {
+		fmt.Println("Data kosong")
+		return
+	}
+
+	for i = 0; i < n; i++ {
+		fmt.Println("Data ke-", i+1)
+		fmt.Println("Client   :", A[i].client)
+		fmt.Println("Projek   :", A[i].projek)
+		fmt.Println("Status   :", A[i].status)
+		fmt.Println("Gaji     :", A[i].salary)
+		fmt.Println("ID Proyek:", A[i].idProyek)
+		fmt.Println("Deadline :", A[i].hari, "-", A[i].bulan)
+		fmt.Println("------------------------------")
 	}
 }
