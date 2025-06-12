@@ -22,7 +22,7 @@ func main() {
 	fmt.Println("-----------------------------------")
 	fmt.Println("      ~~~ Selamat Datang ~~~	 	")
 	fmt.Println("-----------------------------------")
-	fmt.Println("Masukkan jumlah data yang ingin anda masukkan: ")
+	fmt.Println("Masukkan jumlah data yang ingin dimasukkan: ")
 	fmt.Scan(&nProyek)
 
 	bacaData(&data, nProyek)
@@ -80,6 +80,8 @@ func menuUtama(pilMenu *int) {
 			menuEditProyek(&data, &nProyek)
 		} else if *pilMenu == 2 {
 			perbaikiStatus(&data, nProyek)
+		} else if *pilMenu == 3 {
+			menuCariProyek(&data, nProyek)
 		} else if *pilMenu == 4 {
 			menuList(data, nProyek)
 		} else if *pilMenu == 5 {
@@ -89,12 +91,6 @@ func menuUtama(pilMenu *int) {
 			fmt.Println("Terimakasih telah menggunakan aplikasi ini.")
 		}
 	}
-	//else if *pilMenu == 2
-	//editStatus(pilMenu)
-	//else if *pilMenu == 3
-	//cariProyek(pilMenu)
-	//else if *pilMenu == 5
-	//show(pilMenu)
 }
 
 // pilihan menu no 1
@@ -121,8 +117,6 @@ func menuEditProyek(A *arrTrack, n *int) {
 		} else if pilMenu == 3 {
 			hapusProyek(A, n)
 		}
-		//else if pilMenu == 2
-		//else if pilMenu == 3
 	}
 }
 
@@ -248,7 +242,7 @@ func hapusProyek(A *arrTrack, n *int) {
 }
 
 //pilihan menu no 2
-func perbaikiStatus(data *arrTrack, n int) {
+func perbaikiStatus(A *arrTrack, n int) {
 	var cariId, i int
 	var found bool
 
@@ -261,17 +255,18 @@ func perbaikiStatus(data *arrTrack, n int) {
 	fmt.Print("Masukkan ID Proyek yang ingin anda perbaiki : ")
 	fmt.Scan(&cariId)
 
+	//seq search
 	for i = 0; i < n; i++ {
-		if data[i].idProyek == cariId {
+		if A[i].idProyek == cariId {
 			found = true
 			fmt.Println()
 			fmt.Println("Proyek Ditemukan")
-			fmt.Println("Nama client :", data[i].client)
-			fmt.Println("Nama Proyek :", data[i].projek)
-			fmt.Println("Status saat ini :", data[i].status)
+			fmt.Println("Nama client :", A[i].client)
+			fmt.Println("Nama Proyek :", A[i].projek)
+			fmt.Println("Status saat ini :", A[i].status)
 
 			fmt.Print("Masukkan status baru (Progress/Selesai/Pending) : ")
-			fmt.Scan(&data[i].status)
+			fmt.Scan(&A[i].status)
 
 			fmt.Println()
 			fmt.Println("Status telah diperbarui.")
@@ -280,6 +275,133 @@ func perbaikiStatus(data *arrTrack, n int) {
 	if !found {
 		fmt.Println()
 		fmt.Println("Proyek dengan ID tersebut tidak ditemukan.")
+	}
+}
+
+//pilihan menu no 3
+func menuCariProyek(A *arrTrack, n int) {
+	var pilMenu int
+
+	for pilMenu != 4 {
+		fmt.Println()
+		fmt.Println("-----------------------------------------")
+		fmt.Println("              Menu Cari Proyek           ")
+		fmt.Println("-----------------------------------------")
+		fmt.Println("Pilih ingin mencari berdasarkan apa :")
+		fmt.Println("1. ID Proyek")
+		fmt.Println("2. Nama Klien")
+		fmt.Println("3. Nama Proyek")
+		fmt.Println("4. Kembali")
+		fmt.Print("Pilih menu (1/2/3/4): ")
+		fmt.Scan(&pilMenu)
+
+		if pilMenu == 1 {
+			berdasarkanId(*A, n)
+		} else if pilMenu == 2 {
+			berdasarkanKlien(*A, n)
+		} else if pilMenu == 3 {
+			berdasarkanProyek(*A, n)
+		}
+	}
+}
+
+//menu lanjutan dari menu 3, mencari proyek berdasarkan Id
+func berdasarkanId(A arrTrack, n int) {
+	var cariId, i int
+	var found bool
+
+	found = false
+
+	fmt.Print("Masukkan ID Proyek yang ingin dicari: ")
+	fmt.Scan(&cariId)
+
+	//seq search
+	for i = 0; i < n; i++ {
+		if A[i].idProyek == cariId {
+			found = true
+			fmt.Println()
+			fmt.Println("Proyek dengan ID :", A[i].idProyek)
+			fmt.Println("------------------------------")
+			fmt.Println("Nama Client  :", A[i].client)
+			fmt.Println("Nama Proyek  :", A[i].projek)
+			fmt.Println("Status Proyek:", A[i].status)
+			fmt.Println("Gaji         :", A[i].salary)
+			fmt.Println("Deadline     :", A[i].hari, "-", A[i].bulan)
+			fmt.Println("------------------------------")
+		}
+	}
+
+	if !found {
+		fmt.Println()
+		fmt.Println("Proyek dengan ID tersebut tidak ditemukan.")
+	}
+}
+
+//menu lanjutan dari menu 3, mencari proyek berdasarkan nama klien
+func berdasarkanKlien(A arrTrack, n int) {
+	var cariKlien string
+	var i int
+	var found bool
+
+	found = false
+
+	fmt.Println("(Gunakan tanda '_' sebagai spasi jika Nama Client lebih dari 1 kata)")
+	fmt.Print("Masukkan nama klien yang ingin dicari: ")
+	fmt.Scan(&cariKlien)
+
+	//seq search
+	for i = 0; i < n; i++ {
+		if A[i].client == cariKlien {
+			found = true
+			fmt.Println()
+			fmt.Println("Proyek dengan Nama Klien :", A[i].client)
+			fmt.Println("------------------------------")
+			fmt.Println("ID Proyek    :", A[i].idProyek)
+			fmt.Println("Nama Proyek  :", A[i].projek)
+			fmt.Println("Status Proyek:", A[i].status)
+			fmt.Println("Gaji         :", A[i].salary)
+			fmt.Println("Deadline     :", A[i].hari, "-", A[i].bulan)
+			fmt.Println("------------------------------")
+		}
+	}
+
+	if !found {
+		fmt.Println()
+		fmt.Println("Proyek dengan nama klien tersebut tidak ditemukan.")
+	}
+}
+
+//menu lanjutan dari menu 3, mencari proyek berdasarkan nama proyek
+func berdasarkanProyek(A arrTrack, n int) {
+	var cariProyek string
+	var i int
+	var found bool
+
+	found = false
+
+	fmt.Println("(Gunakan tanda '_' sebagai spasi jika Nama Proyek lebih dari 1 kata)")
+	fmt.Print("Masukkan nama proyek yang ingin dicari: ")
+	fmt.Scan(&cariProyek)
+
+	//seq search
+	for i = 0; i < n; i++ {
+		if A[i].projek == cariProyek {
+			found = true
+			fmt.Println()
+			fmt.Println("Proyek dengan Nama Proyek :", A[i].projek)
+			fmt.Println("------------------------------")
+			fmt.Println("ID Proyek    :", A[i].idProyek)
+			fmt.Println("Nama Klien   :", A[i].client)
+			fmt.Println("Status Proyek:", A[i].status)
+			fmt.Println("Gaji         :", A[i].salary)
+			fmt.Println("Deadline     :", A[i].hari, "-", A[i].bulan)
+			fmt.Println("------------------------------")
+		}
+	}
+
+	if !found {
+		fmt.Println()
+		fmt.Println("Proyek dengan nama proyek tersebut tidak ditemukan.")
 	}
 }
 
@@ -389,6 +511,7 @@ func tampilProyek(A *arrTrack, n int) {
 
 	fmt.Println()
 	fmt.Println("------------------------------")
+
 	if n == 0 {
 		fmt.Println("Data kosong")
 		return
