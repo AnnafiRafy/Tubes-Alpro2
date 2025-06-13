@@ -307,33 +307,60 @@ func menuCariProyek(A *arrTrack, n int) {
 
 //menu lanjutan dari menu 3, mencari proyek berdasarkan Id
 func berdasarkanId(A arrTrack, n int) {
-	var cariId, i int
+	var cariId, left, right, mid int
 	var found bool
 
 	found = false
+	left = 1
+	right = n
 
 	fmt.Print("Masukkan ID Proyek yang ingin dicari: ")
 	fmt.Scan(&cariId)
 
-	//seq search
-	for i = 0; i < n; i++ {
-		if A[i].idProyek == cariId {
+	//binary search
+	for left <= right && !found {
+		mid = (left + right) / 2
+		if A[mid].idProyek == cariId {
 			found = true
-			fmt.Println()
-			fmt.Println("Proyek dengan ID :", A[i].idProyek)
-			fmt.Println("------------------------------")
-			fmt.Println("Nama Client  :", A[i].client)
-			fmt.Println("Nama Proyek  :", A[i].projek)
-			fmt.Println("Status Proyek:", A[i].status)
-			fmt.Println("Gaji         :", A[i].salary)
-			fmt.Println("Deadline     :", A[i].hari, "-", A[i].bulan)
-			fmt.Println("------------------------------")
+		} else if A[mid].idProyek < cariId {
+			left = mid + 1
+		} else {
+			right = mid - 1
 		}
 	}
 
-	if !found {
+	if found {
+		fmt.Println()
+		fmt.Println("Proyek dengan ID :", A[mid].idProyek)
+		fmt.Println("------------------------------")
+		fmt.Println("Nama Client  :", A[mid].client)
+		fmt.Println("Nama Proyek  :", A[mid].projek)
+		fmt.Println("Status Proyek:", A[mid].status)
+		fmt.Println("Gaji         :", A[mid].salary)
+		fmt.Println("Deadline     :", A[mid].hari, "-", A[mid].bulan)
+		fmt.Println("------------------------------")
+	} else {
 		fmt.Println()
 		fmt.Println("Proyek dengan ID tersebut tidak ditemukan.")
+	}
+}
+
+//procedure untuk mengurutkan id secara ascending, menggunakan insertion sort
+func urutkanId(A *arrTrack, n int) {
+	var i, pass int
+	var temp tracking
+
+	pass = 1
+
+	for pass < n {
+		i = pass
+		temp = A[pass]
+		for i > 0 && A[i-1].idProyek > temp.idProyek {
+			A[i] = A[i-1]
+			i--
+		}
+		A[i] = temp
+		pass++
 	}
 }
 
@@ -443,7 +470,7 @@ func menuList(A arrTrack, n int) {
 	}
 }
 
-//sequential search
+//mencari nilai extreme
 func bayaranMax(A arrTrack, n int) int {
 	var maxIdx, i int
 	if n == 0 {
