@@ -437,7 +437,7 @@ func berdasarkanProyek(A arrTrack, n int) {
 //menu nomor 4
 func menuList(A arrTrack, n int) {
 	var pil string
-	var idxGaji, idxDeadline int
+	var idxGaji, idxDeadline, i int
 
 	fmt.Println()
 	fmt.Println("--------------------------------------------")
@@ -446,15 +446,17 @@ func menuList(A arrTrack, n int) {
 	fmt.Println()
 	fmt.Println("a. Deadline terdekat")
 	fmt.Println("b. Bayaran tertinggi")
-	//fmt.Println("c. Data deadline terdekat dan yang terjauh")
-	//fmt.Println("d. Data bayaran dari yang tertinggi ke terendah")
+	fmt.Println("c. Data deadline terdekat - terjauh")
+	fmt.Println("d. Data deadline terjauh - terdekat")
+	fmt.Println("e. Data bayaran terendah - tertinggi")
+	fmt.Println("f. Data bayaran tertinggi - terendah")
 	fmt.Print("Pilihan: ")
 	fmt.Scan(&pil)
 
 	if pil == "a" {
 		idxDeadline = deadline(A, n)
 		if idxDeadline != -1 {
-			fmt.Printf("\nDeadline Terdekat:\nID Proyek: %d\nNama Client: %s\nNama Proyek: %s\nDeadline: %02d-%02d\n",
+			fmt.Printf("\nDeadline Terdekat:\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\n",
 				A[idxDeadline].idProyek, A[idxDeadline].client, A[idxDeadline].projek, A[idxDeadline].hari, A[idxDeadline].bulan)
 		} else {
 			fmt.Println("Tidak ada data deadline.")
@@ -464,15 +466,67 @@ func menuList(A arrTrack, n int) {
 	if pil == "b" {
 		idxGaji = bayaranMax(A, n)
 		if idxGaji != -1 {
-			fmt.Printf("\nBayaran Tertinggi:\nId Proyek: %d\nNama Client: %s\nNama Proyek: %s\nGaji: %d\n",
+			fmt.Printf("\nBayaran Tertinggi:\nID Proyek: %d\nClient: %s\nProyek: %s\nGaji: %d\n",
 				A[idxGaji].idProyek, A[idxGaji].client, A[idxGaji].projek, A[idxGaji].salary)
 		} else {
 			fmt.Println("Data tidak tersedia.")
 		}
 	}
+
+	if pil == "c" {
+		deadlineAsc(&A, n)
+		if n > 0 {
+			fmt.Println("\nData deadline urut terdekat - terjauh:")
+			for i = 0; i < n; i++ {
+				fmt.Printf("\nID Proyek: %s\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
+					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+			}
+		} else {
+			fmt.Println("Tidak ada data.")
+		}
+	}
+
+	if pil == "d" {
+		deadlineDesc(&A, n)
+		if n > 0 {
+			fmt.Println("\nData deadline urut terjauh - terdekat:")
+			for i = 0; i < n; i++ {
+				fmt.Printf("\nID Proyek: %s\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
+					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+			}
+		} else {
+			fmt.Println("Tidak ada data.")
+		}
+	}
+
+	if pil == "e" {
+		bayarAsc(&A, n)
+		if n > 0 {
+			fmt.Println("\nData bayaran urut terendah - tertinggi:")
+			for i = 0; i < n; i++ {
+				fmt.Printf("\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
+					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+			}
+		} else {
+			fmt.Println("Tidak ada data.")
+		}
+	}
+
+	if pil == "f" {
+		bayarDesc(&A, n)
+		if n > 0 {
+			fmt.Println("\nData bayaran urut tertinggi - terendah:")
+			for i = 0; i < n; i++ {
+				fmt.Printf("\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
+					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+			}
+		} else {
+			fmt.Println("Tidak ada data.")
+		}
+	}
 }
 
-//mencari nilai extreme
+//sequential search
 func bayaranMax(A arrTrack, n int) int {
 	var maxIdx, i int
 	if n == 0 {
@@ -501,45 +555,87 @@ func deadline(A arrTrack, n int) int {
 	return terdekatIdx
 }
 
-// Sorting berdasarkan bayaran tertinggi ke bawah
-func bayarTerurut(A *arrTrack, n int) {
-	var i, j, maxIdx int
+// Insertion berdasarkan bayaran terendah
+func bayarAsc(A *arrTrack, n int) {
+	var pass, i int
 	var temp tracking
-	for i = 0; i < n-1; i++ {
-		maxIdx = i
-		for j = i + 1; j < n; j++ {
-			if A[j].salary > A[maxIdx].salary {
-				maxIdx = j
-			}
+
+	pass = 1
+	for pass <= n-1 {
+		i = pass
+		temp = A[pass]
+
+		for i > 0 && temp.salary < A[i-1].salary {
+			A[i] = A[i-1]
+			i = i - 1
 		}
-		temp = A[i]
-		A[i] = A[maxIdx]
-		A[maxIdx] = temp
+
+		A[i] = temp
+		pass = pass + 1
+	}
+}
+
+// Insertion berdasarkan bayaran tertinggi
+func bayarDesc(A *arrTrack, n int) {
+	var pass, i int
+	var temp tracking
+
+	pass = 1
+	for pass <= n-1 {
+		i = pass
+		temp = A[pass]
+
+		for i > 0 && temp.salary > A[i-1].salary {
+			A[i] = A[i-1]
+			i = i - 1
+		}
+
+		A[i] = temp
+		pass = pass + 1
 	}
 }
 
 // Sorting berdasarkan deadline terdekat
-func deadlineUrut(A *arrTrack, n int) {
-	var i, j, minIdx int
+func deadlineAsc(A *arrTrack, n int) {
+	var pass, i, idx int
 	var temp tracking
-	for i = 0; i < n-1; i++ {
-		minIdx = i
-		for j = i + 1; j < n; j++ {
-			if A[j].hari < A[minIdx].hari {
-				minIdx = j
+
+	for pass = 1; pass < n; pass++ {
+		idx = pass - 1
+		for i = pass; i < n; i++ {
+			if A[i].bulan < A[idx].bulan ||
+				(A[i].bulan == A[idx].bulan && A[i].hari < A[idx].hari) {
+				idx = i
 			}
 		}
-		temp = A[i]
-		A[i] = A[minIdx]
-		A[minIdx] = temp
+		temp = A[pass-1]
+		A[pass-1] = A[idx]
+		A[idx] = temp
 	}
 }
 
+// Sorting berdasarkan deadline terjauh
+func deadlineDesc(A *arrTrack, n int) {
+	var pass, i, idx int
+	var temp tracking
+
+	for pass = 1; pass < n; pass++ {
+		idx = pass - 1
+		for i = pass; i < n; i++ {
+			if A[i].bulan > A[idx].bulan ||
+				(A[i].bulan == A[idx].bulan && A[i].hari > A[idx].hari) {
+				idx = i
+			}
+		}
+		temp = A[pass-1]
+		A[pass-1] = A[idx]
+		A[idx] = temp
+	}
+}
+
+//menu 5
 func tampilProyek(A *arrTrack, n int) {
 	var i int
-
-	fmt.Println()
-	fmt.Println("------------------------------")
 
 	if n == 0 {
 		fmt.Println("Data kosong")
@@ -548,12 +644,12 @@ func tampilProyek(A *arrTrack, n int) {
 
 	for i = 0; i < n; i++ {
 		fmt.Println("Data ke-", i+1)
-		fmt.Println("ID Proyek    :", A[i].idProyek)
-		fmt.Println("Nama Client  :", A[i].client)
-		fmt.Println("Nama Proyek  :", A[i].projek)
-		fmt.Println("Status Proyek:", A[i].status)
-		fmt.Println("Gaji         :", A[i].salary)
-		fmt.Println("Deadline     :", A[i].hari, "-", A[i].bulan)
+		fmt.Println("ID Proyek:", A[i].idProyek)
+		fmt.Println("Client   :", A[i].client)
+		fmt.Println("Projek   :", A[i].projek)
+		fmt.Println("Status   :", A[i].status)
+		fmt.Println("Deadline :", A[i].hari, "-", A[i].bulan)
+		fmt.Println("Gaji     :", A[i].salary)
 		fmt.Println("------------------------------")
 	}
 }
