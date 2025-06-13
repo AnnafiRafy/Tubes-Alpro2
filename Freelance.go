@@ -88,7 +88,9 @@ func menuUtama(pilMenu *int) {
 			tampilProyek(&data, nProyek)
 		} else if *pilMenu == 6 {
 			fmt.Println()
+			fmt.Println("-------------------------------------------")
 			fmt.Println("Terimakasih telah menggunakan aplikasi ini.")
+			fmt.Println("-------------------------------------------")
 		}
 	}
 }
