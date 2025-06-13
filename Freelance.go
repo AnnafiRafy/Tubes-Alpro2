@@ -311,11 +311,13 @@ func berdasarkanId(A arrTrack, n int) {
 	var found bool
 
 	found = false
-	left = 1
-	right = n
+	left = 0
+	right = n - 1
 
 	fmt.Print("Masukkan ID Proyek yang ingin dicari: ")
 	fmt.Scan(&cariId)
+
+	urutkanId(&A, n)
 
 	//binary search
 	for left <= right && !found {
