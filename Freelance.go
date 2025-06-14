@@ -233,7 +233,7 @@ func hapusProyek(A *arrTrack, n *int) {
 
 	if found != -1 { //jika id yang dicari ketemu
 		for i = found; i < *n-1; i++ {
-			A[i] = A[i+1]
+			A[i] = A[i+1] //menghapus proyek dengan cara menimpa
 		}
 		*n = *n - 1
 		fmt.Println("Proyek berhasil dihapus.")
@@ -650,7 +650,7 @@ func tampilProyek(A *arrTrack, n int) {
 		fmt.Println("Data ke-", i+1)
 		fmt.Println("ID Proyek:", A[i].idProyek)
 		fmt.Println("Client   :", A[i].client)
-		fmt.Println("Projek   :", A[i].projek)
+		fmt.Println("Proyek   :", A[i].projek)
 		fmt.Println("Status   :", A[i].status)
 		fmt.Println("Deadline :", A[i].hari, "-", A[i].bulan)
 		fmt.Println("Gaji     :", A[i].salary)
