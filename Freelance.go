@@ -480,8 +480,11 @@ func menuList(A arrTrack, n int) {
 		if n > 0 {
 			fmt.Println("\nData deadline urut terdekat - terjauh:")
 			for i = 0; i < n; i++ {
+				fmt.Println("------------------------------")
+				fmt.Printf("Data ke - %d", i+1)
 				fmt.Printf("\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
 					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+				fmt.Println("------------------------------")
 			}
 		} else {
 			fmt.Println("Tidak ada data.")
@@ -493,8 +496,11 @@ func menuList(A arrTrack, n int) {
 		if n > 0 {
 			fmt.Println("\nData deadline urut terjauh - terdekat:")
 			for i = 0; i < n; i++ {
+				fmt.Println("------------------------------")
+				fmt.Printf("Data ke - %d", i+1)
 				fmt.Printf("\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
 					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+				fmt.Println("------------------------------")
 			}
 		} else {
 			fmt.Println("Tidak ada data.")
@@ -506,8 +512,11 @@ func menuList(A arrTrack, n int) {
 		if n > 0 {
 			fmt.Println("\nData bayaran urut terendah - tertinggi:")
 			for i = 0; i < n; i++ {
+				fmt.Println("------------------------------")
+				fmt.Printf("Data ke - %d", i+1)
 				fmt.Printf("\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
 					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+				fmt.Println("------------------------------")
 			}
 		} else {
 			fmt.Println("Tidak ada data.")
@@ -519,8 +528,11 @@ func menuList(A arrTrack, n int) {
 		if n > 0 {
 			fmt.Println("\nData bayaran urut tertinggi - terendah:")
 			for i = 0; i < n; i++ {
+				fmt.Println("------------------------------")
+				fmt.Printf("Data ke - %d", i+1)
 				fmt.Printf("\nID Proyek: %d\nClient: %s\nProyek: %s\nDeadline: %02d-%02d\nGaji: %d\n",
 					A[i].idProyek, A[i].client, A[i].projek, A[i].hari, A[i].bulan, A[i].salary)
+				fmt.Println("------------------------------")
 			}
 		} else {
 			fmt.Println("Tidak ada data.")
